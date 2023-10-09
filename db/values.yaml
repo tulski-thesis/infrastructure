@@ -1,2 +1,13 @@
+serviceAccount:
+  create: true
+rbac:
+  enabled: true
+auth:
+  database: store
 metrics:
   enabled: true
+  serviceMonitor:
+    enabled: true
+    namespace: observability
+    labels:
+      release: observability
