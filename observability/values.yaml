@@ -1,0 +1,4 @@
+nameOverride: observability-stack
+namespaceOverride: observability
+alertmanager:
+  enabled: false

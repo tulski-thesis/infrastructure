@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: observability-ingress
+  namespace: observability
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: public
+  tls:
+    - hosts:
+        - monitoring.tulski.com
+      secretName: observability-certificate
+  rules:
+    - host: monitoring.tulski.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: observability-grafana
+                port:
+                  name: http-web
