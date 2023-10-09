@@ -1,0 +1,43 @@
+replicaCount: 1
+
+service:
+  name: registry
+  port: 3200
+
+storage: filesystem
+persistence:
+  enabled: true
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-issuer
+    nginx.ingress.kubernetes.io/proxy-body-size: "10720m"
+  path: /
+  hosts:
+    - registry.tulski.com
+  tls:
+   - secretName: registry-certificate
+     hosts:
+       - registry.tulski.com
+
+serviceAccount:
+  create: true
+  name: "registry-sa"
+
+metrics:
+  enabled: true
+  port: 5001
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: observability
+  prometheusRule:
+    enabled: false
+
+garbageCollect:
+  enabled: true
+  deleteUntagged: true
+  schedule: "0 3 * * *"
